@@ -20,8 +20,8 @@ class UserAuthController
             'password' => 'required',
         ]);
 
-        // ✅ FIX DISINI
-        $user = DB::table('users')
+        // ✅ FIX: tabel user (tanpa s)
+        $user = DB::table('user')
             ->where('username', $request->username)
             ->first();
 
@@ -38,7 +38,7 @@ class UserAuthController
             'nama'    => $user->nama,
             'role'    => $user->role,
         ]);
-        
+
         if ($user->role == 'admin') {
             return redirect()->route('dashboard.admin');
         } else {

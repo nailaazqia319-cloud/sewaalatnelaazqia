@@ -2,46 +2,47 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
-class PenyewaAuthController extends Controller
+class PenyewaAuthController
 {
-    // tampilkan form login
     public function showLoginForm()
     {
         return view('auth.loginpenyewa');
     }
 
-    // proses login
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+        $request->validate([
+            'username' => 'required',
+            'password' => 'required',
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+        $user = DB::table('penyewas')
+            ->where('username', $request->username)
+            ->first();
 
-            // redirect setelah login (bebas kamu mau kemana)
-            return redirect()->intended('/dashboard');
+        if (!$user) {
+            return back()->with('error', 'Username tidak ditemukan');
         }
 
-        return back()->withErrors([
-            'email' => 'Email atau password salah',
-        ])->onlyInput('email');
+        if (!Hash::check($request->password, $user->password)) {
+            return back()->with('error', 'Password salah');
+        }
+
+        session([
+            'penyewa_id' => $user->id,
+            'nama' => $user->nama,
+        ]);
+
+        return redirect()->route('dashboard.penyewa');
     }
 
-    // logout (opsional)
-    public function logout(Request $request)
+    public function logout()
     {
-        Auth::logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect('/loginpenyewa');
+        session()->flush();
+        return redirect()->route('login.penyewa');
     }
 }

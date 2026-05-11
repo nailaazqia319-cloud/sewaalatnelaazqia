@@ -11,7 +11,7 @@
 
         <div class="card-body">
 
-            <form action="#" method="POST">
+            <form action="{{ route('login.penyewa.post') }}" method="POST">
                 @csrf
 
                 <div class="form-group">

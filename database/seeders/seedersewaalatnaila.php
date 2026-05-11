@@ -5,15 +5,14 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Carbon\Carbon;
 
-class seedersewaalatatayya extends Seeder
+class SeederSewaAlatNaila extends Seeder
 {
     public function run(): void
     {
-        // ================= USERS =================
-        DB::table('users')->insert([
+        // ================= USER =================
+        DB::table('user')->insert([
             [
                 'nama' => 'Admin',
                 'username' => 'admin',
@@ -33,7 +32,7 @@ class seedersewaalatatayya extends Seeder
         ]);
 
         // ================= PENYEWA =================
-        DB::table('penyewas')->insert([
+        DB::table('penyewa')->insert([
             [
                 'nama' => 'Budi',
                 'username' => 'budi',
@@ -52,24 +51,26 @@ class seedersewaalatatayya extends Seeder
             ],
         ]);
 
-        // ================= MASTER =================
-        DB::table('kategoris')->insert([
+        // ================= KATEGORI =================
+        DB::table('kategori')->insert([
             ['nama' => 'Outdoor'],
             ['nama' => 'Elektronik'],
         ]);
 
-        DB::table('merks')->insert([
+        // ================= MERK =================
+        DB::table('merk')->insert([
             ['nama' => 'Canon'],
             ['nama' => 'Eiger'],
         ]);
 
-        DB::table('kondisis')->insert([
+        // ================= KONDISI =================
+        DB::table('kondisi')->insert([
             ['nama' => 'Baru'],
             ['nama' => 'Bekas'],
         ]);
 
         // ================= ALAT =================
-        DB::table('alats')->insert([
+        DB::table('alat')->insert([
             [
                 'nama' => 'Kamera Canon',
                 'kategori_id' => 2,
@@ -95,7 +96,7 @@ class seedersewaalatatayya extends Seeder
         ]);
 
         // ================= DENDA =================
-        DB::table('dendas')->insert([
+        DB::table('denda')->insert([
             [
                 'nama' => 'Telat',
                 'jumlah' => 50000,
@@ -105,7 +106,7 @@ class seedersewaalatatayya extends Seeder
         ]);
 
         // ================= ARTIKEL =================
-        DB::table('artikels')->insert([
+        DB::table('artikel')->insert([
             [
                 'user_id' => 1,
                 'kategori_id' => 1,
@@ -120,7 +121,7 @@ class seedersewaalatatayya extends Seeder
         ]);
 
         // ================= KOMENTAR =================
-        DB::table('komentars')->insert([
+        DB::table('komentar')->insert([
             [
                 'artikel_id' => 1,
                 'penyewa_id' => 1,
@@ -131,7 +132,7 @@ class seedersewaalatatayya extends Seeder
         ]);
 
         // ================= PEMESANAN =================
-        DB::table('pemesanans')->insert([
+        DB::table('pemesanan')->insert([
             [
                 'user_id' => 1,
                 'penyewa_id' => 1,
@@ -144,8 +145,8 @@ class seedersewaalatatayya extends Seeder
             ],
         ]);
 
-        // ================= DETAIL =================
-        DB::table('detail_pemesanans')->insert([
+        // ================= DETAIL PEMESANAN =================
+        DB::table('detail_pemesanan')->insert([
             [
                 'pemesanan_id' => 1,
                 'alat_id' => 1,

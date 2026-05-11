@@ -8,8 +8,8 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // ================= USERS =================
-        Schema::create('users', function (Blueprint $table) {
+        // ================= USER =================
+        Schema::create('user', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
             $table->string('username')->unique();
@@ -19,7 +19,7 @@ return new class extends Migration
         });
 
         // ================= PENYEWA =================
-        Schema::create('penyewas', function (Blueprint $table) {
+        Schema::create('penyewa', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
             $table->string('username')->unique();
@@ -28,40 +28,53 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // ================= MASTER =================
-        Schema::create('kategoris', function (Blueprint $table) {
+        // ================= KATEGORI =================
+        Schema::create('kategori', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
             $table->timestamps();
         });
 
-        Schema::create('merks', function (Blueprint $table) {
+        // ================= MERK =================
+        Schema::create('merk', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
             $table->timestamps();
         });
 
-        Schema::create('kondisis', function (Blueprint $table) {
+        // ================= KONDISI =================
+        Schema::create('kondisi', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
             $table->timestamps();
         });
 
         // ================= ALAT =================
-        Schema::create('alats', function (Blueprint $table) {
+        Schema::create('alat', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->foreignId('kategori_id')->constrained('kategoris')->cascadeOnDelete();
-            $table->foreignId('merk_id')->constrained('merks')->cascadeOnDelete();
-            $table->foreignId('kondisi_id')->constrained('kondisis')->cascadeOnDelete();
+
+            $table->foreignId('kategori_id')
+                ->constrained('kategori')
+                ->cascadeOnDelete();
+
+            $table->foreignId('merk_id')
+                ->constrained('merk')
+                ->cascadeOnDelete();
+
+            $table->foreignId('kondisi_id')
+                ->constrained('kondisi')
+                ->cascadeOnDelete();
+
             $table->integer('stok')->default(0);
             $table->integer('harga_sewa');
             $table->text('deskripsi')->nullable();
+
             $table->timestamps();
         });
 
         // ================= DENDA =================
-        Schema::create('dendas', function (Blueprint $table) {
+        Schema::create('denda', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
             $table->integer('jumlah');
@@ -69,10 +82,17 @@ return new class extends Migration
         });
 
         // ================= ARTIKEL =================
-        Schema::create('artikels', function (Blueprint $table) {
+        Schema::create('artikel', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('kategori_id')->nullable()->constrained('kategoris')->nullOnDelete();
+
+            $table->foreignId('user_id')
+                ->constrained('user')
+                ->cascadeOnDelete();
+
+            $table->foreignId('kategori_id')
+                ->nullable()
+                ->constrained('kategori')
+                ->nullOnDelete();
 
             $table->string('judul');
             $table->string('slug')->unique();
@@ -84,50 +104,84 @@ return new class extends Migration
         });
 
         // ================= KOMENTAR =================
-        Schema::create('komentars', function (Blueprint $table) {
+        Schema::create('komentar', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('artikel_id')->constrained('artikels')->cascadeOnDelete();
-            $table->foreignId('penyewa_id')->constrained('penyewas')->cascadeOnDelete();
+
+            $table->foreignId('artikel_id')
+                ->constrained('artikel')
+                ->cascadeOnDelete();
+
+            $table->foreignId('penyewa_id')
+                ->constrained('penyewa')
+                ->cascadeOnDelete();
+
             $table->text('isi');
+
             $table->timestamps();
         });
 
         // ================= PEMESANAN =================
-        Schema::create('pemesanans', function (Blueprint $table) {
+        Schema::create('pemesanan', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('penyewa_id')->constrained('penyewas')->cascadeOnDelete();
+
+            $table->foreignId('user_id')
+                ->constrained('user')
+                ->cascadeOnDelete();
+
+            $table->foreignId('penyewa_id')
+                ->constrained('penyewa')
+                ->cascadeOnDelete();
+
             $table->date('tanggal_pesan');
             $table->date('tanggal_kembali');
+
             $table->integer('total')->default(0);
-            $table->enum('status', ['pending', 'disetujui', 'selesai'])->default('pending');
+
+            $table->enum('status', [
+                'pending',
+                'disetujui',
+                'selesai'
+            ])->default('pending');
+
             $table->timestamps();
         });
 
-        // ================= DETAIL =================
-        Schema::create('detail_pemesanans', function (Blueprint $table) {
+        // ================= DETAIL PEMESANAN =================
+        Schema::create('detail_pemesanan', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pemesanan_id')->constrained('pemesanans')->cascadeOnDelete();
-            $table->foreignId('alat_id')->constrained('alats')->cascadeOnDelete();
-            $table->foreignId('denda_id')->nullable()->constrained('dendas')->nullOnDelete();
+
+            $table->foreignId('pemesanan_id')
+                ->constrained('pemesanan')
+                ->cascadeOnDelete();
+
+            $table->foreignId('alat_id')
+                ->constrained('alat')
+                ->cascadeOnDelete();
+
+            $table->foreignId('denda_id')
+                ->nullable()
+                ->constrained('denda')
+                ->nullOnDelete();
+
             $table->integer('jumlah');
             $table->integer('harga');
+
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('detail_pemesanans');
-        Schema::dropIfExists('pemesanans');
-        Schema::dropIfExists('komentars');
-        Schema::dropIfExists('artikels');
-        Schema::dropIfExists('dendas');
-        Schema::dropIfExists('alats');
-        Schema::dropIfExists('kondisis');
-        Schema::dropIfExists('merks');
-        Schema::dropIfExists('kategoris');
-        Schema::dropIfExists('penyewas');
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('detail_pemesanan');
+        Schema::dropIfExists('pemesanan');
+        Schema::dropIfExists('komentar');
+        Schema::dropIfExists('artikel');
+        Schema::dropIfExists('denda');
+        Schema::dropIfExists('alat');
+        Schema::dropIfExists('kondisi');
+        Schema::dropIfExists('merk');
+        Schema::dropIfExists('kategori');
+        Schema::dropIfExists('penyewa');
+        Schema::dropIfExists('user');
     }
 };
