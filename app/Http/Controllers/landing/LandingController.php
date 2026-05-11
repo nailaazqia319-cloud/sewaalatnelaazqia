@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Landing;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class LandingController extends Controller
+class LandingController
 {
     // 🔥 DATA DUMMY (sementara)
     private function getData()
@@ -85,9 +84,10 @@ class LandingController extends Controller
 
         $kategori = collect($data['kategoris'])->firstWhere('id', $id);
 
-        $artikels = collect($data['artikels'])->where('kategori_id', $id);
+        $artikels = collect($data['artikels'])
+            ->where('kategori_id', $id);
 
-        return view('landing.kategori', compact('kategori','artikels'));
+        return view('landing.kategori', compact('kategori', 'artikels'));
     }
 
     // 🏷️ TAG
@@ -99,7 +99,7 @@ class LandingController extends Controller
             return str_contains($a['tag'], $tag);
         });
 
-        return view('landing.tag', compact('artikels','tag'));
+        return view('landing.tag', compact('artikels', 'tag'));
     }
 
     // ℹ️ TENTANG

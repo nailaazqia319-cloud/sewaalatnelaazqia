@@ -1,6 +1,6 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
 
-    <a href="/admin/dashboard" class="brand-link">
+    <a href="/dashboard/admin" class="brand-link">
         <span class="brand-text font-weight-bold">ADMIN PANEL</span>
     </a>
 
@@ -9,21 +9,26 @@
         <nav class="mt-3">
             <ul class="nav nav-pills nav-sidebar flex-column">
 
+                {{-- DASHBOARD --}}
                 <li class="nav-item">
-                    <a href="/admin/dashboard" class="nav-link">
+                    <a href="/dashboard/admin" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
 
+                {{-- MASTER DATA --}}
                 <li class="nav-header">MASTER DATA</li>
 
+                {{-- ✅ HANYA ADMIN --}}
+                @if(session('role') == 'admin')
                 <li class="nav-item">
-                    <a href="/user" class="nav-link">
+                    <a href="{{ route('user.index') }}" class="nav-link">
                         <i class="nav-icon fas fa-users"></i>
                         <p>Manajemen User</p>
                     </a>
                 </li>
+                @endif
 
                 <li class="nav-item">
                     <a href="/kategori" class="nav-link">
@@ -60,6 +65,7 @@
                     </a>
                 </li>
 
+                {{-- TRANSAKSI --}}
                 <li class="nav-header">TRANSAKSI</li>
 
                 <li class="nav-item">
@@ -76,6 +82,7 @@
                     </a>
                 </li>
 
+                {{-- KONTEN --}}
                 <li class="nav-header">KONTEN</li>
 
                 <li class="nav-item">
@@ -92,6 +99,7 @@
                     </a>
                 </li>
 
+                {{-- LAPORAN --}}
                 <li class="nav-header">LAPORAN</li>
 
                 <li class="nav-item">

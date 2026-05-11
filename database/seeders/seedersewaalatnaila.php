@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
-class seedersewaalatunah extends Seeder
+class seedersewaalatatayya extends Seeder
 {
     public function run(): void
     {

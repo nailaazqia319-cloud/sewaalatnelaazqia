@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class UserAuthController extends Controller
+class UserAuthController
 {
     public function loginForm()
     {
@@ -36,10 +35,10 @@ class UserAuthController extends Controller
 
         session([
             'user_id' => $user->id,
-            'nama' => $user->nama,
-            'role' => $user->role
+            'nama'    => $user->nama,
+            'role'    => $user->role,
         ]);
-
+        
         if ($user->role == 'admin') {
             return redirect()->route('dashboard.admin');
         } else {
