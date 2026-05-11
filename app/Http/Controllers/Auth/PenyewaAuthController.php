@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller; // Ditambahkan agar standar
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class PenyewaAuthController
+class PenyewaAuthController extends Controller // Ditambahkan extends Controller
 {
     public function showLoginForm()
     {
@@ -20,7 +21,8 @@ class PenyewaAuthController
             'password' => 'required',
         ]);
 
-        $user = DB::table('penyewas')
+        // Perbaikan: Ganti 'penyewas' menjadi 'penyewa'
+        $user = DB::table('penyewa')
             ->where('username', $request->username)
             ->first();
 

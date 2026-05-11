@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Carbon\Carbon;
+use Carbon\Carbon; // Penting untuk menangani tanggal
 
 class SeederSewaAlatNaila extends Seeder
 {
@@ -16,7 +16,7 @@ class SeederSewaAlatNaila extends Seeder
             [
                 'nama' => 'Admin',
                 'username' => 'admin',
-                'password' => Hash::make('123'),
+                'password' => Hash::make('admin123'),
                 'role' => 'admin',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -24,7 +24,7 @@ class SeederSewaAlatNaila extends Seeder
             [
                 'nama' => 'Petugas',
                 'username' => 'petugas',
-                'password' => Hash::make('123'),
+                'password' => Hash::make('petugas123'),
                 'role' => 'petugas',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -34,10 +34,10 @@ class SeederSewaAlatNaila extends Seeder
         // ================= PENYEWA =================
         DB::table('penyewa')->insert([
             [
-                'nama' => 'Budi',
-                'username' => 'budi',
+                'nama' => 'nela',
+                'username' => 'nela',
                 'hp' => '08123456789',
-                'password' => Hash::make('123'),
+                'password' => Hash::make('password123'),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -45,7 +45,7 @@ class SeederSewaAlatNaila extends Seeder
                 'nama' => 'Siti',
                 'username' => 'siti',
                 'hp' => '08129876543',
-                'password' => Hash::make('123'),
+                'password' => Hash::make('password123'),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -53,20 +53,20 @@ class SeederSewaAlatNaila extends Seeder
 
         // ================= KATEGORI =================
         DB::table('kategori')->insert([
-            ['nama' => 'Outdoor'],
-            ['nama' => 'Elektronik'],
+            ['nama' => 'Outdoor', 'created_at' => now(), 'updated_at' => now()],
+            ['nama' => 'Elektronik', 'created_at' => now(), 'updated_at' => now()],
         ]);
 
         // ================= MERK =================
         DB::table('merk')->insert([
-            ['nama' => 'Canon'],
-            ['nama' => 'Eiger'],
+            ['nama' => 'Canon', 'created_at' => now(), 'updated_at' => now()],
+            ['nama' => 'Eiger', 'created_at' => now(), 'updated_at' => now()],
         ]);
 
         // ================= KONDISI =================
         DB::table('kondisi')->insert([
-            ['nama' => 'Baru'],
-            ['nama' => 'Bekas'],
+            ['nama' => 'Baru', 'created_at' => now(), 'updated_at' => now()],
+            ['nama' => 'Bekas', 'created_at' => now(), 'updated_at' => now()],
         ]);
 
         // ================= ALAT =================

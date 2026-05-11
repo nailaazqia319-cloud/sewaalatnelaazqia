@@ -2,29 +2,63 @@
 
 @section('content')
 
-<div class="container mt-3">
+<div class="container mt-4">
 
-    <!-- Hero -->
-    <div class="jumbotron text-center bg-primary text-white">
-        <h3>Sistem Sewa Alat</h3>
-        <p>Sewa alat dengan mudah dan cepat</p>
+    <!-- HERO -->
+    <div class="jumbotron text-center text-white"
+         style="background: linear-gradient(135deg, #007bff, #00c6ff); border-radius: 12px;">
+        <h2 class="font-weight-bold">Sistem Sewa Alat</h2>
+        <p class="mb-0">Sewa alat dengan mudah, cepat, dan terpercaya</p>
     </div>
 
-    <!-- Artikel Terbaru -->
-    <h5>Artikel Terbaru</h5>
+    <!-- ARTIKEL -->
+    <h5 class="mt-4 mb-3">📌 Artikel Terbaru</h5>
+
     <div class="row">
-        @foreach($artikels ?? [] as $a)
-        <div class="col-md-4">
-            <div class="card mb-3">
-                <img src="{{ asset('uploads/'.$a['gambar']) }}" class="card-img-top">
-                <div class="card-body">
-                    <h6>{{ $a['judul'] }}</h6>
-                    <p>{{ \Illuminate\Support\Str::limit($a['isi'], 80) }}</p>
-                    <a href="/artikel/{{ $a['id'] }}" class="btn btn-sm btn-primary">Baca</a>
+
+        @forelse($artikels ?? [] as $a)
+
+            <div class="col-md-4 mb-3">
+
+                <div class="card shadow-sm border-0 h-100">
+
+                    {{-- GAMBAR DUMMY / REAL --}}
+                    <img
+                        src="{{ $a['gambar'] 
+                            ? asset('uploads/'.$a['gambar']) 
+                            : 'https://source.unsplash.com/600x400/?tool,construction' }}"
+                        class="card-img-top"
+                        style="height: 180px; object-fit: cover;"
+                    >
+
+                    <div class="card-body">
+
+                        <h6 class="font-weight-bold">
+                            {{ $a['judul'] }}
+                        </h6>
+
+                        <p class="text-muted" style="font-size: 14px;">
+                            {{ \Illuminate\Support\Str::limit($a['isi'], 90) }}
+                        </p>
+
+                        <a href="/artikel/{{ $a['id'] }}" class="btn btn-primary btn-sm">
+                            Baca Selengkapnya
+                        </a>
+
+                    </div>
+
                 </div>
+
             </div>
-        </div>
-        @endforeach
+
+        @empty
+
+            <div class="col-12 text-center text-muted">
+                Belum ada artikel tersedia
+            </div>
+
+        @endforelse
+
     </div>
 
 </div>

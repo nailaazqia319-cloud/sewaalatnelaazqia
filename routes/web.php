@@ -1,16 +1,27 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| CONTROLLERS
+|--------------------------------------------------------------------------
+*/
 use App\Http\Controllers\Landing\LandingController;
 use App\Http\Controllers\Auth\UserAuthController;
-use App\Http\Controllers\Dashboard\DashboardController; // ✅ WAJIB ADA
+use App\Http\Controllers\Auth\PenyewaAuthController;
+use App\Http\Controllers\Dashboard\DashboardController;
+
+use App\Http\Controllers\Master\MerkController;
+use App\Http\Controllers\Master\KondisiController;
+use App\Http\Controllers\Master\AlatController;
+use App\Http\Controllers\Master\UserController;
 
 /*
 |--------------------------------------------------------------------------
 | LANDING (PUBLIC)
 |--------------------------------------------------------------------------
 */
-
 Route::controller(LandingController::class)->group(function () {
 
     Route::get('/', 'home')->name('home');
@@ -25,29 +36,48 @@ Route::controller(LandingController::class)->group(function () {
     Route::get('/tentang', 'tentang')->name('tentang');
     Route::get('/kontak', 'kontak')->name('kontak');
     Route::get('/daftar-isi', 'daftarIsi')->name('daftar.isi');
-
-    // PENYEWA
-    Route::view('/loginpenyewa', 'auth.loginpenyewa')->name('login.penyewa');
-    Route::view('/register-penyewa', 'auth.registerpenyewa')->name('register.penyewa');
 });
 
 /*
+|--------------------------------------------------------------------------
+| LOGIN PENYEWA (PUBLIC AUTH)
+|--------------------------------------------------------------------------
+*/
+Route::get('/loginpenyewa', [PenyewaAuthController::class, 'showLoginForm'])
+    ->name('login.penyewa');
+
+Route::post('/loginpenyewa', [PenyewaAuthController::class, 'login'])
+    ->name('login.penyewa.post');
+Route::get('/register-penyewa', function () {
+    return view('auth.registerpenyewa');
+})->name('register.penyewa');
+// Contoh Route untuk Dashboard Penyewa
+Route::get('/dashboard-penyewa', function () {
+    return view('penyewa.dashboard'); // Pastikan file ini ada di resources/views/penyewa/dashboard.blade.php
+})->name('dashboard.penyewa'); // NAMA INI HARUS SAMA DENGAN DI CONTROLLER
+// Tambahkan route logout ini
+Route::post('/logout-penyewa', [PenyewaAuthController::class, 'logout'])->name('logout.penyewa');
+/*
+
 |--------------------------------------------------------------------------
 | AUTH USER (ADMIN & PETUGAS)
 |--------------------------------------------------------------------------
 */
 Route::prefix('user')->group(function () {
 
-    Route::get('/login', [UserAuthController::class, 'loginForm'])->name('login.user');
+    Route::get('/login', [UserAuthController::class, 'loginForm'])
+        ->name('login.user');
 
-    Route::post('/login', [UserAuthController::class, 'login'])->name('login.user.post');
+    Route::post('/login', [UserAuthController::class, 'login'])
+        ->name('login.user.post');
 
-    Route::get('/logout', [UserAuthController::class, 'logout'])->name('logout.user');
+    Route::get('/logout', [UserAuthController::class, 'logout'])
+        ->name('logout.user');
 });
 
 /*
 |--------------------------------------------------------------------------
-| DASHBOARD (SETELAH LOGIN)
+| DASHBOARD
 |--------------------------------------------------------------------------
 */
 Route::prefix('dashboard')->group(function () {
@@ -59,16 +89,11 @@ Route::prefix('dashboard')->group(function () {
         ->name('dashboard.petugas');
 });
 
-use App\Http\Controllers\Master\MerkController;
-
 /*
 |--------------------------------------------------------------------------
-| MERK (ADMIN & PETUGAS)
+| MASTER MERK
 |--------------------------------------------------------------------------
 */
-
-
-
 Route::prefix('merk')->group(function () {
     Route::get('/', [MerkController::class, 'index'])->name('merk.index');
     Route::get('/create', [MerkController::class, 'create'])->name('merk.create');
@@ -78,8 +103,11 @@ Route::prefix('merk')->group(function () {
     Route::get('/delete/{id}', [MerkController::class, 'delete'])->name('merk.delete');
 });
 
-use App\Http\Controllers\Master\KondisiController;
-
+/*
+|--------------------------------------------------------------------------
+| MASTER KONDISI
+|--------------------------------------------------------------------------
+*/
 Route::prefix('kondisi')->group(function () {
     Route::get('/', [KondisiController::class, 'index'])->name('kondisi.index');
     Route::get('/create', [KondisiController::class, 'create'])->name('kondisi.create');
@@ -89,28 +117,29 @@ Route::prefix('kondisi')->group(function () {
     Route::get('/delete/{id}', [KondisiController::class, 'delete'])->name('kondisi.delete');
 });
 
-use App\Http\Controllers\Master\AlatController;
-
+/*
+|--------------------------------------------------------------------------
+| MASTER ALAT
+|--------------------------------------------------------------------------
+*/
 Route::prefix('alat')->group(function () {
     Route::get('/', [AlatController::class, 'index'])->name('alat.index');
     Route::get('/create', [AlatController::class, 'create'])->name('alat.create');
     Route::post('/store', [AlatController::class, 'store'])->name('alat.store');
     Route::get('/delete/{id}', [AlatController::class, 'delete'])->name('alat.delete');
 });
-use App\Http\Controllers\Master\UserController;
 
 /*
-|------------------------------------------
+|--------------------------------------------------------------------------
 | MASTER USER (ADMIN ONLY)
-|------------------------------------------
+|--------------------------------------------------------------------------
 */
-Route::middleware([])->group(function () {
+Route::prefix('user')->group(function () {
 
-    Route::get('/user', [UserController::class, 'index'])->name('user.index');
-    Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
-    Route::post('/user/store', [UserController::class, 'store'])->name('user.store');
-    Route::get('/user/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
-    Route::post('/user/update/{id}', [UserController::class, 'update'])->name('user.update');
-    Route::get('/user/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
-
+    Route::get('/', [UserController::class, 'index'])->name('user.index');
+    Route::get('/create', [UserController::class, 'create'])->name('user.create');
+    Route::post('/store', [UserController::class, 'store'])->name('user.store');
+    Route::get('/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
+    Route::post('/update/{id}', [UserController::class, 'update'])->name('user.update');
+    Route::get('/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
 });
